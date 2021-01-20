@@ -1,0 +1,19 @@
+.root{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    
+}
+
+.root > * {
+    margin: 10px;
+    width: 140px;
+    height: 100px;
+    
+}
+
+.container{
+    margin: 0 auto;
+    width: 80%;
+    justify-content: center;
+}
