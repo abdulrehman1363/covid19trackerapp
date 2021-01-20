@@ -1,23 +1,57 @@
-import logo from './logo.svg';
+import { useEffect ,useState} from "react";
+import  Cards  from "./components/Cards";
+import { Chart } from "./components/Chart";
+import { CountryPicker } from "./components/CountryPicker";
+import  fetchData   from "./api/index";
+
 import './App.css';
 
 function App() {
+
+  const [data,setData] = useState({})
+  const [isFetching, setFetching] = useState(true);
+  const [country,setCountry] = useState('')
+  
+
+  useEffect(()=>{
+    
+    async function getData(){
+      
+      const response = await fetchData();
+
+      setData(response)
+      setFetching(false); 
+      
+    }
+    getData();
+    
+  },[setData]);
+
+  const handleChange = async (country) => {
+
+    async function getData(country){
+      
+      const response = await fetchData(country);
+
+      setData(response)
+      setFetching(false); 
+      
+    }
+    getData(country);
+    setCountry(country);
+  }
+  console.log(data)
+  
+  if(isFetching){
+    return ( <h2 className="App">Loading .....</h2>);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Cards confirmed={data.confirmed.value} recovered={data.recovered.value} deaths={data.deaths.value}/>
+      <CountryPicker handleChange={handleChange} />
+      <Chart confirmed={data.confirmed.value} recovered={data.recovered.value} deaths={data.deaths.value} country={country}/>
+
     </div>
   );
 }
